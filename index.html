@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone number OTP Verification</title>
+    <style>
+       .containder
+        {
+            width: 320px;
+            height: 175;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            top: 0px;
+            bottom: 0px;
+            margin: auto;
+            margin-top: 300px;
+            
+        }
+        #number, #verifications {
+            width: calc(100% - 24px);
+            padding: 10px;
+            font-size: 20px;
+            margin-bottom: 5px;
+            outline: none;
+            
+
+        }
+       .recaptcha{
+        margin-bottom: 5px;
+
+       }
+       #send, #verification{
+        width: 100%;
+        height: 50px;
+        outline: none;
+       }
+       #p-config, #n-config{
+         width: calc(100% - 22px);
+         border: 2px solid green;
+         border-radius: 4px;
+         padding: 8px 10px;
+         margin: 4px 0px;
+        background-color: rgba(red, green, blue, alpha);
+        color: black;
+        background-color: green;
+        display: none;
+       }
+       #n-config{
+        border-color: red;
+background-color: rgb(144, 64, 64);
+
+       }
+        
+    </style>
+</head>
+<body>
+    <div class="containder">
+        <div id="sender">
+            <input type="text" name="number" id="number" placeholder="+250********">
+            <div id="recaptcha-container"></div>
+                <input type="button" name="send" id="send" value="send" onclick="phoneAuth()">
+            </div>
+            <div id="verify" style="display: none ;">
+                <input type="text" name="verifications" id="verifications" placeholder="OTP Message">
+                <input type="button" name="verification" id="verification" value="verification">
+            </div>
+            <div id="p-config">
+    Number Verified
+            </div>
+            <div id="n-config">
+    OTP Error Verify Again
+            </div>
+        </div>
+    </div>
+    <!-- add firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
+    
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAKn3gfW71lrTp694UL0ijnsN2LAeE0LIU",
+  authDomain: "otp-verification-ec698.firebaseapp.com",
+  projectId: "otp-verification-ec698",
+  storageBucket: "otp-verification-ec698.appspot.com",
+  messagingSenderId: "429482658508",
+  appId: "1:429482658508:web:28ad1ecd384b1314195069",
+  measurementId: "G-3BTHBBV8K1"
+};
+firebase.initializeApp(firebaseConfig);
+// render recaptcha verifier
+render();
+function render() {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+    recaptchaVerifier.render();
+}
+// function for send OTP
+function phoneAuth() {
+    var number = document.getElementById('number').value;
+    firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function (confirmationResult) {
+        window.confirmationResult = confirmationResult;
+        coderesult = confirmationResult;
+        console.log('OTP Sent');
+    }).catch(function (error) {
+        // error in sending OTP
+        alert(error.message);
+    });
+}
+
+// function for OTP verify
+function codeverify() {
+    var code = document.getElementById('verifications').value;
+    coderesult.confirm(code).then(function () {
+        console.log('p-config');
+    }).catch(function () {
+        console.log('n-config');
+    })
+}
+
+
+
+    </script>
+</body>
+</html>
